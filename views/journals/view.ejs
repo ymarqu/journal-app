@@ -1,0 +1,10 @@
+<%layout('layouts/boilerplate')-%>
+    <div>
+        <h3><%=entry.title%></h3>
+        <p><%=entry.journal%></p>
+        <small><%=entry.date%></small>
+    </div>
+    <a href="/journals">Back</a>
+    <a href="/journals/<%=entry.id%>/edit">Edit</a>
+</body>
+</html>
