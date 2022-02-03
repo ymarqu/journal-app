@@ -13,5 +13,22 @@
     <div class="container my-5">
     <%-body-%>
     </div>
+    <script>
+        (function(){
+            'use strict'
+
+            let forms = document.querySelectorAll('.form-validate');
+            Array.from(forms).forEach(function(form){
+                form.addEventListener('submit', (e) => {
+                    if(!form.checkValidity()){
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                 form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+
 </body>
 </html>

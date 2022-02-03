@@ -19,7 +19,7 @@ const work = async() => {
     for(let journalEntry of journalEntries){
     const entry = new Journal({
         title: journalEntry.title,
-        journal: journalEntry.journal,
+        entry: journalEntry.entry,
         date: journalEntry.date
     });
     await entry.save();

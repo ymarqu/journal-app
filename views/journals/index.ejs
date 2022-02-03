@@ -5,7 +5,7 @@
     <a href="/journals/new">New Journal Entry</a>
     <%for(let journal of allJournals){%>
         <h3><a href="/journals/<%=journal.id%>"><%=journal.title%></a></h3>
-        <p><%=journal.journal%></p>
+        <p><%=journal.entry%></p>
         <small><%=journal.date%></small>
     <%}%> 
    </div>

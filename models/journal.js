@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const journalSchema = new mongoose.Schema({
     title:String,
-    journal:String,
+    entry:String,
     date:String
 });
 
