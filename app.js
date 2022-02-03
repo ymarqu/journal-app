@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const engine = require('ejs-mate');
 const methodOverride = require('method-override');
 const Journal = require('./models/journal');
+const Joi = require('joi');
+const{journalSchema} = require('./joiValidateSchema');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/expressError');
 const path = require('path');
@@ -22,6 +24,19 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname + '/views'));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
+
+
+const ValidateJournal = (req, res,next) => {
+    
+    const {error} = journalSchema.validate(req.body);
+    if(error){
+        const message = error.details.map(el => el.message).join(',');
+        throw new ExpressError(message, 400);
+    }else{
+        next();
+    }
+}
+
 
 app.get('/', (req,res) => {
     res.send('This is the home page')
@@ -48,12 +63,11 @@ app.get('/journals/:id/edit', catchAsync(async(req,res) => {
     res.render('journals/edit', {editEntry});
 }));
 
-app.post('/journals', catchAsync(async(req,res) => {
-    if(!req.body.journal) throw new ExpressError('Invaild Data Provided', 400);
-    console.log(req.body.journal);
+app.post('/journals', ValidateJournal, catchAsync(async(req,res) => {
+    
+    console.log(result);
     let date = new Date().toLocaleString('UTC', options);
-    console.log(date);
-    const newJournalObj = req.body.journal;
+    const newJournalObj = req.body;
     newJournalObj.date = date;
     const newJournal = new Journal(newJournalObj);
     await newJournal.save();
@@ -61,7 +75,7 @@ app.post('/journals', catchAsync(async(req,res) => {
 
 }));
 
-app.patch('/journals/:id', catchAsync(async(req,res) => {
+app.patch('/journals/:id',ValidateJournal, catchAsync(async(req,res) => {
     const {id} = req.params;
     await Journal.findByIdAndUpdate(id, req.body);
     res.redirect(`/journals/${id}`);
@@ -77,8 +91,9 @@ app.all('*', (req,res,next) => {
     next(new ExpressError('Page not found', 404))
 });
 app.use((err,req,res,next) => {
-    const {status = 500, message = 'Something went wrong'} = err;
-    res.status(status).send(message);
+    const {status = 500} = err;
+    if(!err.message)err.message = 'Oops something went wrong!';
+    res.status(status).render('error', {err});
 });
 app.listen(3000, () => {
     console.log('Listening on port 3000');
