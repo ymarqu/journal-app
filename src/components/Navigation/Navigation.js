@@ -4,6 +4,8 @@ class Navigation extends Component{
 
     render(){
 
+        const {onChangeRoute, isSignedIn} = this.props;
+
         return(
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -30,12 +32,19 @@ class Navigation extends Component{
                 </ul>
 
                 <div className="d-flex align-items-center">
-                    <button type="button" className="btn btn-link px-3 me-2">
+                  {isSignedIn === false ?
+                  <>
+                    <button onClick={() => {onChangeRoute('login')}}type="button" className="btn btn-link px-3 me-2">
                     Login
                     </button>
-                    <button type="button" className="btn btn-primary me-3">
+                    <button onClick={() => {onChangeRoute('register')}}type="button" className="btn btn-primary me-3">
                     Sign up for free
                     </button>
+                    </>:
+                    <button onClick={() => {onChangeRoute('signout')}} type="button" className="btn btn-link px-3 me-2">
+                    Log out
+                    </button>
+                    }
                 </div>
                 </div>
             </div>
