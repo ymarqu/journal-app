@@ -7,7 +7,7 @@ class Login extends Component{
         super();
         this.state = {
             email: '',
-            password: ''
+            password: '',
         }
     }
 
@@ -20,9 +20,21 @@ class Login extends Component{
     }
 
     onSubmitLogin = () => {
-        console.log(this.state.email);
-        console.log(this.state.password);
-        this.props.onChangeRoute('home');
+        fetch('http://localhost:3000/signin', {
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                email: this.state.email,
+                password: this.state.password
+            })
+        })
+        .then(res => res.json())
+        .then(user => {
+            if(user.id){
+                this.props.onChangeRoute("home");
+                this.props.loadUser(user);
+            }
+        })
     }
 
 
@@ -64,8 +76,8 @@ class Login extends Component{
                     <input
                     onClick={this.onSubmitLogin}
                     className="b ph4 pv2 input-reset ba white b--white bg-light-purple grow pointer f6 dib"
-                    type="submit"
-                    value="Login"
+                    type="button"
+                    value="Sign In"
                     />
                     </div>
                     <div className="lh-copy mt3">

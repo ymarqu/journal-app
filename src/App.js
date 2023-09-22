@@ -13,8 +13,26 @@ class App extends Component {
     super();
     this.state = {
       loggedIn : false,
-      route: 'login'
+      route: 'login',
+    user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
     }
+   }
+  }
+
+
+  loadUser = (data) => {
+    this.setState({user : {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+    }});
   }
 
   onChangeRoute = (route) => {
@@ -26,6 +44,12 @@ class App extends Component {
       this.setState({route: route})
   }
 
+
+  componentDidMount(){
+    fetch('http://localhost:3000')
+    .then(res => res.json())
+  }
+
 render(){
 
   return (
@@ -33,18 +57,18 @@ render(){
         <Navigation isSignedIn={this.state.loggedIn} onChangeRoute={this.onChangeRoute} />
         { this.state.route === 'home' ?
           <div className='flex flex-column justify-center items-center vh-75'>
-        <Greeting />
+        <Greeting userName={this.state.user.name} />
         <MoodTracker />
         <JournalEntry />
         </div>
            :
            this.state.route === 'register' ?
            <div className='flex justify-center items-center vh-75'>
-            <Register />
+            <Register loadUser={this.loadUser} onChangeRoute={this.onChangeRoute}/>
           </div>
            :
            <div className='flex justify-center items-center vh-75'>
-            <Login onChangeRoute={this.onChangeRoute}/>
+            <Login loadUser={this.loadUser} onChangeRoute={this.onChangeRoute}/>
           </div>
         }
     </div>

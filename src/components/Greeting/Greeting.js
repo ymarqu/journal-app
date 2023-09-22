@@ -5,9 +5,11 @@ class Greeting extends Component{
 
     render(){
 
+        const { userName } = this.props;
+
         return(
             <div>
-                <h1>Good Morning, Yesenia!</h1>
+                <h1>Good Morning, {userName}!</h1>
             </div>
         )
     }
