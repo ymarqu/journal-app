@@ -1,6 +1,5 @@
 import Navigation from './components/Navigation/Navigation';
 import Greeting from './components/Greeting/Greeting';
-import MoodTracker from './components/MoodTracker/MoodTracker';
 import './App.css';
 import JournalEntry from './components/JounrnalEntry/JournalEntry';
 import Login from './components/Login/Login';
@@ -58,8 +57,8 @@ render(){
         { this.state.route === 'home' ?
           <div className='flex flex-column justify-center items-center vh-75'>
         <Greeting userName={this.state.user.name} />
-        <MoodTracker />
-        <JournalEntry />
+
+        <JournalEntry user={this.state.user}/>
         </div>
            :
            this.state.route === 'register' ?

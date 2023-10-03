@@ -14,22 +14,29 @@ class JournalEntry extends Component{
 
 
         onChangeEmotion = (emotion) => {
-            this.setState({entry: emotion});
-            console.log(this.state.emotion);
+            this.setState({emotion: emotion}, () => {
+                console.log(this.state.emotion);
+            });
+
         }
 
-        onChageEntry = (e) => {
+        onChangeEntry = (e) => {
             this.setState({entry: e.target.value});
+            console.log(this.state.entry)
         }
 
 
         onSubmitEntry = () =>{
+            console.log(this.props.user.id)
+            console.log(this.state.entry)
+            console.log(this.state.emotion)
             fetch('http://localhost:3000/entry', {
                 method: 'post',
                 headers: {'Content-Type' : 'application/json'},
                 body: JSON.stringify({
-                    id: this.props.id,
+                    id: this.props.user.id,
                     entry: this.state.entry,
+                    emotion: this.state.emotion
                 })
             })
             .then(response => response.json())
@@ -42,17 +49,21 @@ class JournalEntry extends Component{
         return(
             <div>
                 <JournalPrompt />
-                <MoodTracker onChageEmotion={this.onChangeEmotion}/>
+                <MoodTracker onChangeEmotion={this.onChangeEmotion}/>
                 <div className="form-outline ba">
                 <textarea
-                onChange={this.onChageEntry}
+                onChange={this.onChangeEntry}
                 className="form-control ba"
                 id="textAreaExample2"
                 rows="8">
                 </textarea>
                 <label className="form-label" htmlFor="textAreaExample2"></label>
                 </div>
-                <a className="f6 link dim br1 ph3 pv2 mb2 dib white bg-purple mt-3 grow" href="#0">Log Entry</a>
+                <p
+                onClick = {this.onSubmitEntry}
+                className="f6 link dim br1 ph3 pv2 mb2 dib white bg-purple mt-3 grow">
+                Log Entry
+                </p>
             </div>
         )
     }
